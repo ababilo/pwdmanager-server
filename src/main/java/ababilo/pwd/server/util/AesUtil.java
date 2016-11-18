@@ -22,7 +22,7 @@ public class AesUtil {
 
     private static final SecureRandom sr = new SecureRandom();
 
-    private static byte[] generateSecureBytes(int length) {
+    public static byte[] generateSecureBytes(int length) {
         byte[] newBytes = new byte[length];
         sr.nextBytes(newBytes);
         return newBytes;
@@ -74,20 +74,20 @@ public class AesUtil {
         return iv;
     }
 
-    private static byte[] encrypt(byte[] key, byte[] IV, byte[] data) throws InvalidAlgorithmParameterException, InvalidKeyException, IOException {
+    private static byte[] encrypt(byte[] key, byte[] iv, byte[] data) throws InvalidAlgorithmParameterException, InvalidKeyException, IOException {
         SecretKey aesKey = new SecretKeySpec(key, 0, key.length, "AES");
         Cipher encryptCipher;
         try {
-            encryptCipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+            encryptCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         } catch (Exception e) {
             return null;
         }
 
-        encryptCipher.init(Cipher.ENCRYPT_MODE, aesKey, new IvParameterSpec(IV));
+        encryptCipher.init(Cipher.ENCRYPT_MODE, aesKey, new IvParameterSpec(iv));
         return cipher(data, encryptCipher);
     }
 
-    private static byte[] decrypt(byte[] key, byte[] IV, byte[] encryptedBytes) throws InvalidAlgorithmParameterException, InvalidKeyException, IOException {
+    private static byte[] decrypt(byte[] key, byte[] iv, byte[] encryptedBytes) throws InvalidAlgorithmParameterException, InvalidKeyException, IOException {
         SecretKey aesKey = new SecretKeySpec(key, 0, key.length, "AES");
 
         Cipher decryptCipher;
@@ -97,7 +97,7 @@ public class AesUtil {
             return null;
         }
 
-        decryptCipher.init(Cipher.DECRYPT_MODE, aesKey, new IvParameterSpec(IV));
+        decryptCipher.init(Cipher.DECRYPT_MODE, aesKey, new IvParameterSpec(iv));
         return cipher(encryptedBytes, decryptCipher);
     }
 

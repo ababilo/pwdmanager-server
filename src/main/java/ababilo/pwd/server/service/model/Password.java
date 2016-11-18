@@ -7,15 +7,15 @@ import java.util.Map;
  */
 public class Password {
 
-    private long id;
+    private short id;
     private byte[] password;
     private Map<String, String> metadata;
 
-    public long getId() {
+    public short getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(short id) {
         this.id = id;
     }
 

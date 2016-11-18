@@ -4,6 +4,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -16,6 +17,7 @@ import java.util.Collections;
  * Created by ababilo on 08.11.16.
  */
 @Configuration
+@EnableAutoConfiguration
 public class DataSourceConfiguration {
 
     @Bean
@@ -33,6 +35,7 @@ public class DataSourceConfiguration {
                 "pwd"
         );
     }
+
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         return new MongoTemplate(mongoDbFactory());
