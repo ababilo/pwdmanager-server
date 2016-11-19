@@ -1,6 +1,5 @@
 package ababilo.pwd.server;
 
-import ababilo.pwd.server.creator.ClientPassword;
 import ababilo.pwd.server.creator.Database;
 import ababilo.pwd.server.repository.BackupRepository;
 import ababilo.pwd.server.repository.ClientRepository;
@@ -15,18 +14,16 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * Created by ababilo on 18.11.16.
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class DatabaseCreator implements CommandLineRunner {
 
     private static final String SALT = "sbs-101-o";
@@ -54,7 +51,7 @@ public class DatabaseCreator implements CommandLineRunner {
 
         BackupEntity backup = new BackupEntity();
         backup.setClient(client);
-        backup.setCreated(OffsetDateTime.now());
+        //backup.setCreated(new OffsetDateTime(java.time.OffsetDateTime.now()));
 
         Password password = new Password();
         password.setId((short) 1);
@@ -69,12 +66,15 @@ public class DatabaseCreator implements CommandLineRunner {
 
     private Database buildDatabase(BackupEntity backup) {
         ClientEntity client = backup.getClient();
+        byte[] btKey = AesUtil.generateSecureBytes(32);
+        byte[] hbtKey = AesUtil.generateSecureBytes(32);
+        System.out.println("CLIENTID: " + client.getId().toHexString());
+        System.out.println("BTKEY: " + Arrays.toString(btKey));
+        System.out.println("HBTKEY: " + Arrays.toString(hbtKey));
         return new Database(
                 client.getId().toHexString(), client.getClientSecret(),
-                AesUtil.generateSecureBytes(32), AesUtil.generateSecureBytes(32),
-                backup.getPasswords().stream()
-                        .map(password -> new ClientPassword(password.getId(), password.getMetadata().get("title"), password.getPassword()))
-                        .collect(Collectors.toList())
+                btKey, hbtKey,
+                Collections.emptyList()
         );
     }
 

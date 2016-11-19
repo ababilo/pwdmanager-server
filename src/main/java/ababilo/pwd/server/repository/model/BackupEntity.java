@@ -5,7 +5,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ public class BackupEntity {
     @DBRef
     private ClientEntity client;
     private List<Password> passwords;
-    private OffsetDateTime created;
+    //private OffsetDateTime created;
 
     public ObjectId getId() {
         return id;
@@ -44,11 +43,11 @@ public class BackupEntity {
         this.passwords = passwords;
     }
 
-    public OffsetDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(OffsetDateTime created) {
-        this.created = created;
-    }
+//    public OffsetDateTime getCreated() {
+//        return created;
+//    }
+//
+//    public void setCreated(OffsetDateTime created) {
+//        this.created = created;
+//    }
 }

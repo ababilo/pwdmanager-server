@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class BackupServiceImpl implements BackupService {
         BackupEntity entity = new BackupEntity();
         entity.setClient(client);
         entity.setPasswords(backup);
-        entity.setCreated(OffsetDateTime.now());
+        //entity.setCreated(new OffsetDateTime(java.time.OffsetDateTime.now()));
         backupRepository.save(entity);
 
         return entity.getId().toHexString();
@@ -54,7 +53,7 @@ public class BackupServiceImpl implements BackupService {
 
     @Override
     public EncryptedPackage restore(String clientId) {
-        BackupEntity backup = backupRepository.findOneByClientId(clientId);
+        BackupEntity backup = backupRepository.findOneByClientId(new ObjectId(clientId));
         if (null == backup) {
             throw new RuntimeException("Backup not found");
         }

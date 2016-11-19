@@ -9,5 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface BackupRepository extends MongoRepository<BackupEntity, ObjectId> {
 
-    BackupEntity findOneByClientId(String clientId);
+    BackupEntity findOneByClientId(ObjectId clientId);
 }

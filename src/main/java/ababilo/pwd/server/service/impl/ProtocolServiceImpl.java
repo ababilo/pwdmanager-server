@@ -1,5 +1,6 @@
 package ababilo.pwd.server.service.impl;
 
+import ababilo.pwd.server.creator.ClientPassword;
 import ababilo.pwd.server.service.ProtocolService;
 import ababilo.pwd.server.service.model.Password;
 import ababilo.pwd.server.util.AesUtil;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ababilo on 08.11.16.
@@ -37,7 +39,9 @@ public class ProtocolServiceImpl implements ProtocolService {
     @Override
     public byte[] packBackup(List<Password> passwords, byte[] secret) {
         try {
-            String json = mapper.writeValueAsString(passwords);
+            String json = mapper.writeValueAsString(passwords.stream()
+                    .map(password -> new ClientPassword(password.getId(), password.getMetadata().get("title"), password.getPassword()))
+                    .collect(Collectors.toList()));
             return AesUtil.encrypt(json.getBytes(Charsets.US_ASCII), secret);
         } catch (Exception e) {
             throw new RuntimeException("Can't pack data", e);
